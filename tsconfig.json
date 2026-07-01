@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2025",
+    "lib": ["ES2025", "dom"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ai-app-builder/core": ["./packages/core/src"],
+      "@ai-app-builder/model-provider": ["./packages/model-provider/src"],
+      "@ai-app-builder/spec-engine": ["./packages/spec-engine/src"],
+      "@ai-app-builder/web-data-layer": ["./packages/web-data-layer/src"],
+      "@ai-app-builder/planner": ["./packages/planner/src"],
+      "@ai-app-builder/generator": ["./packages/generator/src"],
+      "@ai-app-builder/validator": ["./packages/validator/src"],
+      "@ai-app-builder/repair": ["./packages/repair/src"],
+      "@ai-app-builder/observability": ["./packages/observability/src"],
+      "@ai-app-builder/security": ["./packages/security/src"]
+    }
+  },
+  "include": [],
+  "exclude": ["node_modules", "dist", ".next", "**/*.test.ts"]
+}

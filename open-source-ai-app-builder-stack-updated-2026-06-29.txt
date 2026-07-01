@@ -1,0 +1,213 @@
+Open-Source AI App Builder Stack (Updated 29 June 2026) for Chat-Driven Full-Stack and Agentic Apps
+
+Executive Summary
+
+This report outlines a concrete, opinionated architecture for building a chat-first AI app builder that can generate and manage full-stack web apps, websites, and multi-agent AI workflows using free and open-source components as of 29 June 2026. The goal remains to approximate the capabilities of proprietary AI app builders while staying self-hostable, modular, and cost-efficient for an individual developer or small team.
+
+The April 2026 version of this report is directionally correct, but several recommendations should now be updated:
+
+- The model layer should no longer be framed around older examples such as StarCoder and Magicoder as the default first choice. A better June 2026 recommendation is to use current open-weight coding models through an abstraction layer so the builder can swap among local Ollama-served models and higher-throughput vLLM-style serving without redesigning the rest of the system.
+- The strongest differentiator is not any single model family, but an environment-scaffolding pipeline that decomposes work, validates outputs, repairs failures, and runs isolated execution loops.
+- Open WebUI should now be treated as a broader self-hosted AI platform rather than only a thin chat shell. It is suitable for model access, tool invocation, retrieval workflows, project operations, and governed multi-user usage.
+- Governance, observability, and permissioning should be designed as core features from the beginning, not added later.
+
+The recommended solution now combines:
+
+- A chat-first frontend using Open WebUI or a custom Next.js application for conversations, project management, logs, and agent operations.
+- An app-generation core based on the environment-scaffolding architecture demonstrated by app.build, using generate -> validate -> repair loops, isolated execution, and stack-aware orchestration.
+- A repository-aware code editing layer using Aider or Continue-style workflows to apply structured changes to Git repositories.
+- LangGraph as the orchestration layer for deterministic and debuggable multi-agent pipelines.
+- Local or self-hosted open coding models served through Ollama for single-user or low-scale operation, with vLLM-class serving for higher concurrency.
+- Open infrastructure such as Docker, Postgres, pgvector, Qdrant where needed, and low-cost deployment targets such as Railway, Render, Fly.io, Vercel, or static hosts depending on the generated app type.
+
+1. Updated Strategic Position
+
+1.1 What Still Holds Up
+
+The core thesis of the original report still holds: the best open-source AI app builder is not just a large language model wrapped in chat, but a controlled system that turns natural language requests into a validated codebase using orchestration, sandboxing, and repair loops. This is now more strongly supported by the published app.build paper, which reports production deployment, thousands of generated user apps, and measurable gains from environment scaffolding.
+
+That means the builder should still be designed around:
+
+- Structured app specification from chat input.
+- Whole-repo generation rather than isolated snippet generation.
+- Sandboxed execution for tests and repair.
+- Iterative diff-based repo editing.
+- Repeatable deployment pipelines.
+
+1.2 What Should Change
+
+The original model recommendations are too anchored to the open-code landscape from early 2026. In late June 2026, the better guidance is to treat models as replaceable infrastructure. The builder should define a model provider layer with routing for:
+
+- Local coding models for development and private usage.
+- Higher-throughput self-hosted serving for teams or shared environments.
+- Optional external APIs only when needed.
+
+This change matters because model quality shifts faster than the builder architecture. Your competitive advantage comes from the workflow, not from being tightly coupled to one model family.
+
+2. Updated Recommended Architecture
+
+2.1 Frontend Layer
+
+Recommended primary options:
+
+- Open WebUI for a ready-made, self-hosted multi-model and multi-tool interface.
+- A custom Next.js dashboard when you want tighter product control, richer UX, and project-centric workflows.
+
+Open WebUI is now best described as a self-hosted AI platform rather than just a local chat wrapper. In practice, it can serve as:
+
+- The user-facing chat interface.
+- The operator console for tool-enabled agents.
+- A hub for retrieval, task execution, and model switching.
+- A gateway for multi-user governance when you need controlled access.
+
+For a productized build system, a custom frontend is still recommended over time, but Open WebUI remains highly useful for internal operations, prototyping, and admin workflows.
+
+2.2 Orchestration Layer
+
+LangGraph remains the best default orchestration choice for this use case because it gives you explicit graph state, deterministic transitions, retry logic, and debuggable multi-agent execution. That maps directly to the needs of an AI app builder where every run should be inspectable.
+
+A strong default graph for June 2026 is:
+
+- spec_analyzer
+- stack_planner
+- repo_scaffolder
+- dependency_resolver
+- validator
+- repair_agent
+- security_gate
+- deploy_agent
+- observability_logger
+
+Compared with the earlier version, the additions that matter most are dependency_resolver, security_gate, and observability_logger.
+
+2.3 Code Generation and Editing Layer
+
+Keep the original combination of scaffolding plus repo editing, but phrase it more concretely:
+
+- Use an app.build-style generator for first-pass whole-project creation.
+- Use Aider or Continue-style diff application for iterative changes.
+- Always track edits through Git so every AI action is inspectable and reversible.
+
+This separation is important. Initial synthesis and iterative repair are related but distinct tasks, and they often perform better when modeled as separate pipeline stages.
+
+2.4 Execution and Validation Layer
+
+The validation layer should remain one of the most important parts of the system, but it needs a more refined description than the April draft.
+
+Recommended validation stack:
+
+- Static checks: TypeScript build, ESLint, schema validation, import resolution.
+- Runtime smoke checks: boot the app, verify routes, check major actions.
+- Focused browser validation only where necessary.
+- Security and policy checks: dependency scanning, secret detection, network restrictions, filesystem restrictions.
+- Repair loops fed by structured logs.
+
+One important update from the app.build findings is that heavy end-to-end browser testing is not always the best first gate. Lightweight smoke validation and backend verification often produce better practical reliability while avoiding brittle false failures.
+
+3. Updated Model and Serving Guidance
+
+3.1 Better Framing for the Model Layer
+
+The older draft lists specific early-2026 code models as the main recommendation. The updated guidance should avoid freezing the stack around specific examples unless benchmarked again at implementation time.
+
+Instead, recommend:
+
+- A provider abstraction that can switch models without changing orchestration logic.
+- Local model serving via Ollama for laptop, private, and low-scale operation.
+- Higher-throughput serving through vLLM-class infrastructure for shared or production workloads.
+- Separate routing for planning, coding, and repair if benchmarks justify specialization.
+
+3.2 Practical Recommendation
+
+For a solo builder on Apple Silicon or a low-cost Linux box, start with Ollama-backed open coding models and keep prompts structured and stack-specific. For team usage, move the same orchestration layer behind a higher-throughput serving backend while preserving the same tool contracts.
+
+This keeps the product adaptable as open-weight coding models improve throughout 2026 and beyond.
+
+4. Updated Feature Set for the Product
+
+The product implied by this report should now explicitly include the following feature areas:
+
+4.1 Core Builder Features
+
+- Chat-only app specification.
+- Whole-project code generation.
+- Stack-aware regeneration of changed modules.
+- Deployment target selection.
+- Built-in validation and repair cycles.
+- Repo history with AI-attributed commits.
+
+4.2 Agent Features
+
+- Agent definitions stored as structured configurations.
+- Tool permission controls.
+- Optional RAG connections through pgvector, Qdrant, or similar stores.
+- Reusable agent templates.
+- Execution traces and run history.
+
+4.3 Governance and Operations
+
+This section should be much stronger than in the April version.
+
+The builder should now assume the need for:
+
+- Role-based access and project separation.
+- Audit logs.
+- Action traces for each generation or repair run.
+- Secret handling with explicit user-provided configuration.
+- Policy gates that prevent risky tool use or unsafe deployment defaults.
+
+These are no longer advanced extras. They are part of what makes an AI app builder trustworthy.
+
+5. Updated Deployment Guidance
+
+The original report is broadly right to recommend low-cost, modular deployment targets, but the updated version should make the deployment strategy more conditional on app type.
+
+Recommended guidance:
+
+- Static marketing sites: Vercel, Netlify, Cloudflare Pages, or GitHub Pages.
+- Full-stack JavaScript apps: Railway, Render, Fly.io, or Vercel where the runtime fits.
+- Postgres-backed apps: Neon or another managed Postgres provider, with pgvector only when retrieval is actually needed.
+- Internal agent services: containerized deployment with Docker and explicit secrets management.
+
+This avoids the common mistake of overcommitting every generated app to the same infrastructure pattern.
+
+6. Revised Roadmap
+
+A better roadmap for a June 2026 implementation is:
+
+Phase 1:
+- Build one opinionated path: Next.js + TypeScript + Postgres.
+- Use chat input to produce a structured spec.
+- Generate a full repository.
+- Run static validation and runtime smoke tests.
+- Repair until passing.
+
+Phase 2:
+- Add repo-aware iterative editing.
+- Add deployment automation.
+- Add trace collection and log views.
+- Add secrets handling and policy enforcement.
+
+Phase 3:
+- Add agent templates.
+- Add RAG options.
+- Add multi-project management.
+- Add role-based access and collaboration.
+
+Phase 4:
+- Add model routing and benchmarking.
+- Add specialized flows for marketing sites, dashboards, internal tools, and agentic back-office apps.
+- Add template packs and reusable vertical stacks.
+
+7. Final Position
+
+As of 29 June 2026, the most durable open-source strategy for a chat-driven AI app builder is still to combine:
+
+- A chat frontend such as Open WebUI or a custom Next.js product UI.
+- LangGraph for orchestration.
+- An app.build-style environment-scaffolding pipeline.
+- Aider or Continue-style repo editing.
+- Local and self-hosted model serving through a replaceable provider layer.
+- Strong validation, policy gates, observability, and auditability.
+
+The biggest upgrade from the April 2026 version is not a radically different stack. It is a clearer emphasis on model abstraction, platform governance, and reliability engineering.

@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@ai-app-builder/*": ["./node_modules/@ai-app-builder/*"]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@ai-app-builder/orchestrator",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@ai-app-builder/core": "workspace:*",
+    "@ai-app-builder/model-provider": "workspace:*",
+    "@ai-app-builder/spec-engine": "workspace:*",
+    "@ai-app-builder/web-data-layer": "workspace:*",
+    "@ai-app-builder/planner": "workspace:*",
+    "@ai-app-builder/generator": "workspace:*",
+    "@ai-app-builder/validator": "workspace:*",
+    "@ai-app-builder/repair": "workspace:*",
+    "@ai-app-builder/observability": "workspace:*",
+    "@ai-app-builder/security": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.0",
+    "@types/node": "^22.0.0"
+  }
+}

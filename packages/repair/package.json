@@ -1,0 +1,17 @@
+{
+  "name": "@ai-app-builder/repair",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Aider-based repair engine for ai-app-builder",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ai-app-builder/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.0"
+  }
+}

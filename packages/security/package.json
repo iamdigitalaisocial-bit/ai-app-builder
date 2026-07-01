@@ -1,0 +1,16 @@
+{
+  "name": "@ai-app-builder/security",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@ai-app-builder/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.0"
+  }
+}
